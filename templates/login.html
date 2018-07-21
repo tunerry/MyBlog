@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html >
+<head>
+{% load staticfiles %}
+<meta charset="UTF-8">
+<title>嘀嘀嘀！</title>
+
+<link rel="stylesheet" href="{% static "css/login.css" %}">
+<link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+<link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+
+</head>
+<body>
+<div style="text-align:center;clear:both">
+</div>
+<div class="cotn_principal" style="background-image:url({% static "/img/pixiv05.png" %});
+        background-repeat:no-repeat;
+        background-position:50% 40%;
+        background-size: cover">
+</br></br></br></br></br></br></br></br></br>
+  <div class="cont_centrar">
+    <div class="cont_login">
+      <div class="cont_info_log_sign_up">
+        <div class="col_md_login">
+          <div class="cont_ba_opcitiy">
+            <h2>登 录</h2>
+              <p>还没登录呀~</br>╰(￣▽￣)╭</p>
+            <button class="btn_login" onClick="cambiar_login()">LOGIN</button>
+          </div>
+        </div>
+        <div class="col_md_sign_up">
+          <div class="cont_ba_opcitiy">
+            <h2>注 册</h2>
+            <p>赶紧上车啦！</br>(๑•̀ㅂ•́)و✧</p>
+            <button class="btn_sign_up" onClick="cambiar_sign_up()">SIGN UP</button>
+          </div>
+        </div>
+      </div>
+      <div class="cont_back_info">
+        <div class="cont_img_back_grey"> <img src="{% static "img/pixiv04.jpg" %}" alt="" /> </div>
+      </div>
+      <div class="cont_forms" >
+        <div class="cont_img_back_"> <img src="{% static "img/pixiv04.jpg" %}" alt="" /> </div>
+        <div class="cont_form_login"> <a href="#" onClick="ocultar_login_sign_up()" ><i class="material-icons">&#xE5C4;</i></a>
+          <h2>LOGIN</h2>
+          <input type="text" id="login_user" placeholder="用户名" />
+          <input type="password" id="login_pwd" placeholder="密 码" />
+          <button class="btn_login" onClick="Login()">LOGIN</button>
+        </div>
+        <div class="cont_form_sign_up"> <a href="#" onClick="ocultar_login_sign_up()"><i class="material-icons">&#xE5C4;</i></a>
+          <h2>SIGN UP</h2>
+          <input type="text" id="signup_user" placeholder="用户名" />
+          <input type="text" id="email" placeholder="邮 箱" />
+          <input type="password" id="signup_pwd" placeholder="密 码" />
+          <input type="password" id="signup_cpwd" placeholder="确认密码" />
+          <button class="btn_sign_up" onClick="Signup()">SIGN UP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<script src="{% static "js/login.js" %}"></script>
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script type="text/javascript">
+    Login = function (){    //登录按钮触发
+        var user = document.getElementById("login_user").value;
+        var pwd = document.getElementById("login_pwd").value;
+        var post_data ={
+            "user": user,
+            "pwd": pwd,
+            "method": "login"
+        };
+
+        $.ajax({
+            url: "{% url 'login' %}",
+            type: "POST",
+            data: post_data,
+            success: function (data) {      //服务器数据传输时运行，得到数据data
+                data = JSON.parse(data);
+                if(data["status"] == 1) {
+                    alert("欢迎，"+data["result"]+'!');
+                    window.parent.location.href="{% url 'index' %}";
+                }
+                    else alert(data["result"]);
+                }
+        });
+    }
+
+    Signup = function (){
+        if(document.getElementById("signup_pwd").value != document.getElementById("signup_cpwd").value)
+            return alert("两次输入密码不同！")
+        var user = document.getElementById("signup_user").value;
+        var pwd = document.getElementById("signup_pwd").value;
+        var email = document.getElementById("email").value;
+        var post_data ={
+            "user": user,
+            "pwd": pwd,
+            'email': email,
+            "method": "signup",
+        };
+
+        $.ajax({
+            url: "{% url 'login' %}",
+            type: "POST",
+            data: post_data,
+            success: function (data) {      //服务器数据传输时运行，得到数据data
+                data = JSON.parse(data);
+                if(data["status"] == 1) {
+                    alert("注册成功！欢迎，"+data["result"]+'!');
+                    window.parent.location.href="{% url 'index' %}";
+                }
+                    else alert(data["result"]);
+                }
+        });
+    }
+</script>
+</body>
+</html>
+

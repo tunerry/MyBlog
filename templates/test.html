@@ -1,0 +1,85 @@
+
+<html>
+<head>
+    {%  load staticfiles %}
+    <meta charset="utf-8">
+    <title>test</title>
+</head>
+
+<body class="body">
+    <!--链接css文件，通过class得到其中的样式-->
+    <link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/try.css" %}" />
+    <h1 style="background-color:antiquewhite;color:black"> Hello World!</h1>
+
+    <div class="form">
+        <h1>用户输入</h1>
+        <form action="/test/" method="post">
+            {% csrf_token %}
+            <input type="text" name="username" />
+            <input type="password" name="password" />
+            <br />
+            <input type="submit" value="提交" style="text-align: center" />
+        </form>
+    </div>
+    <!--根据 render(request, "index.html",{"users":user_list})
+        第三个字典参数的键，得到值，
+        获得views中传来的数据，再显示出来-->
+    <div class="table">
+        <h1>用户展示</h1>
+        <table>
+            <thead>
+                <th>编号</th>
+                <th>用户名</th>
+                <th>密码</th>
+            </thead>
+            <tbody>
+                {% for line in users %}
+                <tr>
+                    <td>{{ line.userid }}</td>
+                    <td>{{ line.name }}</td>
+                    <td>{{ line.pwd }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+        <style>
+        .black_overlay{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=88);
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            width: 5%;
+            height: 5%;
+            padding: 20px;
+            border: 10px solid orange;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+        }
+    </style>
+    </head>
+
+        <p>示例弹出层：<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">请点这里</a></p>
+        <div id="light" class="white_content">这是一个层窗口示例程序.
+<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">点这里关闭本窗口</a></div>
+        <div id="fade" class="black_overlay"></div>
+
+</body>
+</html>

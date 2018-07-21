@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    {% load staticfiles %}
+<title>Hi~ o(*￣▽￣*)ブ</title>
+<meta charset="utf-8" />
+<meta name="viewport " content="width=device-width, initial-scale=1" />
+<link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
+<link rel="stylesheet" href="{% static "css/main.css" %}" />
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+	<a href="{% url 'toLogin' %}" class="logo"><strong id="username">{{ user }}</strong></a>
+	<nav>
+		<a href="#menu">菜单</a>
+	</nav>
+</header>
+
+<!-- Nav -->
+<nav id="menu">
+	<ul class="links">
+		<li><a href="#">主页</a></li>
+		<li><a href="{% url 'generic' %}">文章</a></li>
+		<li><a href="{% url 'generic' %}" id="center">个人中心</a></li>
+		<li><a href="#" id="logout" onclick="Logout()">注销</a></li>
+	</ul>
+</nav>
+
+<!-- Banner -->
+<section id="banner" style="background-image:url({% static "/img/pixiv01.png" %});
+        background-repeat:no-repeat;
+        background-position:50% 50%;
+        background-size: cover">    <!--这一条太牛了-->
+	<div class="inner">
+		<h1>开心的或是幸福的<br />
+		请写下来</h1>
+		<ul class="actions">
+			<li><a href="#one" class="button alt scrolly big" style="visibility: hidden">Continue</a></li>
+		</ul>
+	</div>
+</section>
+
+<!-- One -->
+<article id="one" class="post style1">
+	<div class="image">
+		<img src="{% static "img/pic14.jpg" %}" alt="" data-position="75% center" />
+	</div>
+	<div class="content">
+		<div class="inner">
+			<header>
+				<h2><a href="toLogin.html">Ipsum lorem sed magna</a></h2>
+				<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+			</header>
+			<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+			<ul class="actions">
+				<li><a href="toLogin.html" class="button alt">Read More</a></li>
+			</ul>
+		</div>
+		<div class="postnav">
+			<a href="#" class="prev disabled"><span class="icon fa-chevron-up"></span></a>
+			<a href="#two" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+		</div>
+	</div>
+</article>
+
+<!-- Two -->
+<article id="two" class="post invert style1 alt">
+	<div class="image">
+		<img src="{% static "img/pic13.jpg" %}" alt="" data-position="10% center" />
+	</div>
+	<div class="content">
+		<div class="inner">
+			<header>
+				<h2><a href="toLogin.html">Donec ex risus mollis</a></h2>
+				<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+			</header>
+			<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+			<ul class="actions">
+				<li><a href="toLogin.html" class="button alt">Read More</a></li>
+			</ul>
+		</div>
+		<div class="postnav">
+			<a href="#one" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+			<a href="#three" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+		</div>
+	</div>
+</article>
+
+<!-- Three -->
+<article id="three" class="post style2">
+	<div class="image">
+		<img src="{% static "img/pic12.jpg" %}" alt="" data-position="80% center" />
+	</div>
+	<div class="content">
+		<div class="inner">
+			<header>
+				<h2><a href="toLogin.html">Sed tempus interdum</a></h2>
+				<p class="info">3 days ago by <a href="#">Jane Doe</a></p>
+			</header>
+			<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
+			<ul class="actions">
+				<li><a href="toLogin.html" class="button alt">Read More</a></li>
+			</ul>
+		</div>
+		<div class="postnav">
+			<a href="#two" class="scrolly prev"><span class="icon fa-chevron-up"></span></a>
+			<a href="#four" class="scrolly next"><span class="icon fa-chevron-down"></span></a>
+		</div>
+	</div>
+</article>
+<div class="tlinks">Collect from <a href="http://www.cssmoban.com/" >手机网站模板</a></div>
+
+
+<!-- Footer -->
+<footer id="footer">
+	<ul class="icons">
+		<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+		<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+		<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+	</ul>
+	<div class="copyright">Copyright &copy; 2016.Company name All rights reserved.More Templates <a href="#" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="#" title="网页模板" target="_blank">网页模板</a></div>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/jquery.scrolly.min.js" %}"></script>
+<script src="{% static "js/skel.min.js" %}"></script>
+<script src="{% static "js/util.js" %}"></script>
+<script src="{% static "js/main.js" %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if(!{{ isLogin }})
+        {
+            document.getElementById('center').style.display='none';
+            document.getElementById('logout').style.display='none';
+        }
+    });
+    Logout = function () {
+        if({{ isLogin }})
+        {
+            var post_data ={
+                "method": "logout"
+            };
+
+            $.ajax({
+                url: "{% url 'index' %}",
+                type: "POST",
+                data: post_data,
+                success: function (data) {      //服务器数据传输时运行，得到数据data
+                    data = JSON.parse(data);
+                    if(data["status"] == 1) {
+                        alert('注销啦！下次再来~');
+                        window.location.href="{% url 'index' %}";
+                    }
+                    }
+            });
+        }
+    }
+</script>
+</body>
+</html>

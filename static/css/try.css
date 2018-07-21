@@ -1,0 +1,20 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.form {
+    background-color: rgb(45, 243, 243);
+    border: 1px black solid;
+    width: 400px;
+    margin-bottom: 3px;
+}
+
+.table {
+    background-color: paleturquoise;
+    border: 1px black solid;
+    width: 400px;
+    margin-bottom: 3px;
+}
+
+
