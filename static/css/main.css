@@ -23,13 +23,13 @@
 		display: block;
 	}
 
-	body {
+/*	body {
 		line-height: 1;
     	-webkit-user-select:none;
     	-moz-user-select:none;
     	-ms-user-select:none;
     	user-select:none;
-	}
+	}	*/
 
 	ol, ul {
 		list-style: none;
@@ -3315,6 +3315,11 @@
 		text-align: center;
 		cursor: default;
 		padding: 10em 4em 9em 4em;
+
+		-webkit-user-select:none;
+    	-moz-user-select:none;
+    	-ms-user-select:none;
+    	user-select:none;
 	}
 
 		#banner input, #banner select, #banner textarea {

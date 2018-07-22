@@ -22,18 +22,21 @@ def test(request):
 
 @csrf_exempt
 def index(request):
+    #被注销的ajax使用
     if(request.method == 'POST'):
         method = request.POST.get('method')
         if(method == 'logout'):
             request.session['isLogin'] = 0
+            request.session['user'] = '还没登录呢'
             return HttpResponse(json.dumps({
                 'status': 1,
             }))
-    isLogin = request.session.get('isLogin')
-    user = '还没登录呢'
-    if(isLogin):
-        user = request.session.get('user')
 
+    isLogin = request.session.get('isLogin')
+    if(isLogin == None):
+        request.session['isLogin'] = 0
+        request.session['user'] = '还没登录呢'
+    user = request.session.get('user')
     return render(request, "index.html", {"user": user,"isLogin":isLogin})
 
 def generic(request):
@@ -84,3 +87,13 @@ def login(request):
                 'result': result,
             }))
     return render(request, "login.html",)
+
+def articles(request):
+    user = request.session.get('user')
+    isLogin = request.session.get('isLogin')
+    return render(request, "Articles.html", {"user": user,"isLogin":isLogin})
+
+def write(request):
+    user = request.session.get('user')
+    isLogin = request.session.get('isLogin')
+    return render(request, "write.html", {"user": user, "isLogin": isLogin})

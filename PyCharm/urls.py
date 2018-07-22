@@ -27,4 +27,6 @@ urlpatterns = [
     url(r'^generic', mysite1.views.generic,name='generic'),
     url(r'^login', mysite1.views.login, name='login'),
     url(r'^toLogin', mysite1.views.toLogin, name='toLogin'),
+    url(r'^articles',mysite1.views.articles,name='ariticles'),
+    url(r'^write', mysite1.views.write, name='write'),
 ]

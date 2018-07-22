@@ -136,3 +136,7 @@ STATICFILES_DIRS =(
 )
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'

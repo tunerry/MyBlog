@@ -2,7 +2,7 @@
 <html>
 <head>
     {% load staticfiles %}
-<title>Hi~ o(*￣▽￣*)ブ</title>
+<title>Ψ(￣∀￣)Ψ</title>
 <meta charset="utf-8" />
 <meta name="viewport " content="width=device-width, initial-scale=1" />
 <link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
@@ -12,7 +12,11 @@
 
 <!-- Header -->
 <header id="header">
+    {% if  not isLogin  %}
 	<a href="{% url 'toLogin' %}" class="logo"><strong id="username">{{ user }}</strong></a>
+    {% else  %}
+    <a href="#" class="logo"><strong id="username">{{ user }}</strong></a>
+    {% endif %}
 	<nav>
 		<a href="#menu">菜单</a>
 	</nav>
@@ -21,8 +25,8 @@
 <!-- Nav -->
 <nav id="menu">
 	<ul class="links">
-		<li><a href="#">主页</a></li>
-		<li><a href="{% url 'generic' %}">文章</a></li>
+		<li><a href="{% url 'index' %}">主页</a></li>
+		<li><a href="#">文章</a></li>
 		<li><a href="{% url 'generic' %}" id="center">个人中心</a></li>
 		<li><a href="#" id="logout" onclick="Logout()">注销</a></li>
 	</ul>
@@ -34,10 +38,10 @@
         background-position:50% 50%;
         background-size: cover">    <!--这一条太牛了-->
 	<div class="inner">
-		<h1>开心的或是幸福的<br />
+		<h1>开心的或是难过的<br />
 		请写下来</h1>
 		<ul class="actions">
-			<li><a href="#one" class="button alt scrolly big" style="visibility: hidden">Continue</a></li>
+			<li><a href="#one" class="button alt scrolly big">写一篇</a></li>
 		</ul>
 	</div>
 </section>
@@ -115,12 +119,7 @@
 
 <!-- Footer -->
 <footer id="footer">
-	<ul class="icons">
-		<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-		<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-		<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-	</ul>
-	<div class="copyright">Copyright &copy; 2016.Company name All rights reserved.More Templates <a href="#" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="#" title="网页模板" target="_blank">网页模板</a></div>
+    <div class="copyright">Copyright &copy; 2018.Company name All rights reserved.lvvvvvvvv.cn - <a href="#" target="_blank" title="联系站长">联系站长</a></div>
 </footer>
 
 <!-- Scripts -->
@@ -130,7 +129,15 @@
 <script src="{% static "js/util.js" %}"></script>
 <script src="{% static "js/main.js" %}"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(function () {
+        var bgs = [];
+        bgs[0] = "{% static 'img/pixiv06-1.jpg' %}";
+        bgs[1] = "{% static 'img/pixiv06-2.jpg' %}";
+        var random = Math.round(Math.random());
+        var imageUrl = "url("+bgs[random]+")";
+        document.getElementById('banner').style.backgroundImage=imageUrl;
+    });
+     $(document).ready(function () {
         if(!{{ isLogin }})
         {
             document.getElementById('center').style.display='none';
