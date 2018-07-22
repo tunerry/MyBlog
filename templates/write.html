@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    {% load staticfiles %}
+<title>Ψ(￣∀￣)Ψ</title>
+<meta charset="utf-8" />
+<meta name="viewport " content="width=device-width, initial-scale=1" />
+<link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
+<link rel="stylesheet" href="{% static "css/main.css" %}" />
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+	<a href="{% url 'toLogin' %}" class="logo"><strong id="username">{{ user }}</strong></a>
+	<nav>
+		<a href="#menu">菜单</a>
+	</nav>
+</header>
+
+<!-- Nav -->
+<nav id="menu">
+	<ul class="links">
+		<li><a href="{% url 'index' %}">主页</a></li>
+		<li><a href="#">文章</a></li>
+		<li><a href="{% url 'generic' %}" id="center">个人中心</a></li>
+		<li><a href="#" id="logout" onclick="Logout()">注销</a></li>
+	</ul>
+</nav>
+
+<!-- Banner -->
+<section id="banner" style="background-image:url({% static "/img/pixiv01.png" %});
+        background-repeat:no-repeat;
+        background-position:50% 50%;
+        background-size: cover">    <!--这一条太牛了-->
+	<div class="inner">
+		<h1>开心的或是难过的<br />
+		请写下来</h1>
+		<ul class="actions">
+			<li><a href="#one" class="button alt scrolly big">写一篇</a></li>
+		</ul>
+	</div>
+</section>
+<!-- Mail -->
+<section id="main">
+	<div class="inner">
+
+<!-- Form -->
+    <br>
+        <h3>写文章</h3></br>
+        <form>
+            <div class="row uniform 50%">
+                <div class="6u 12u$(xsmall)">
+                    <input type="text" name="title" id="title" value="" placeholder="标 题" />
+                </div>
+
+                <div class="4u 12u$">
+                    <div class="select-wrapper">
+                        <select name="category" id="category" >
+                            <option value="0" disabled selected style='display:none;'>类 别</option>
+                            <option value="1">博 客</option>
+                            <option value="2">其 它</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="4u 12u$(xsmall)">
+                    <input type="radio" id="priority-low" name="priority" checked>
+                    <label for="priority-low">公开</label>
+                </div>
+                <div class="4u 12u$(xsmall)">
+                    <input type="radio" id="priority-normal" name="priority">
+                    <label for="priority-normal">匿名</label>
+                </div>
+                <div class="6u 12u$(small)">
+                    <input type="checkbox" id="checkbox" name="checkbox" onclick="Upload(this)">
+                    <label for="checkbox">自定义封面图片</label>
+                </div>
+                <div class="6u 12u$(small)">
+                    <input type="file" id="upload" name="upload" style="visibility: hidden">
+                </div>
+                <div class="12u$">
+                    <textarea name="article" id="article" placeholder="开始写吧~" rows="6" style="resize: none"></textarea>
+                </div>
+                <div class="12u$">
+                    <ul class="actions">
+                        <li><a class="button special" onclick="ToUpload()">发 表</a></li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- Footer -->
+<footer id="footer">
+    <div class="copyright">Copyright &copy; 2018.Company name All rights reserved.lvvvvvvvv.cn - <a href="#" target="_blank" title="联系站长">联系站长</a></div>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/jquery.scrolly.min.js" %}"></script>
+<script src="{% static "js/skel.min.js" %}"></script>
+<script src="{% static "js/util.js" %}"></script>
+<script src="{% static "js/main.js" %}"></script>
+<script type="text/javascript">
+    Upload = function (checkbox) {
+        if (checkbox.checked == true)
+        {
+            document.getElementById('upload').style.visibility='visible';
+        }
+        else if (checkbox.checked == false)
+        {
+            document.getElementById('upload').style.visibility='hidden';
+        }
+    }
+
+    ToUpload = function(){
+        var title = document.getElementById('title');
+        var category = document.getElementById('category');
+        var article = document.getElementById('article');
+        var image = document.getElementById('upload');
+        var check = document.getElementById('checkbox').checked;
+        //输入检测
+        if(title.value == '')
+        {
+            alert('标题没写呢！');
+            return false;
+        }
+        if(category.value == 0)
+        {
+            alert('请选择类别！');
+            return false;
+        }
+        if(article.value == '')
+        {
+            alert('文章好歹写一点吧！');
+            return false;
+        }
+        if(check == true)
+        {
+            if(image.value == '')
+            {
+                alert('你还没上传图片！');
+                return false;
+            }
+        }
+        //ajax数据处理
+    }
+
+
+ $(document).ready(function () {
+        if(!{{ isLogin }})
+        {
+            document.getElementById('center').style.display='none';
+            document.getElementById('logout').style.display='none';
+        }
+    });
+    Logout = function () {
+        if({{ isLogin }})
+        {
+            var post_data ={
+                "method": "logout"
+            };
+
+            $.ajax({
+                url: "{% url 'index' %}",
+                type: "POST",
+                data: post_data,
+                success: function (data) {      //服务器数据传输时运行，得到数据data
+                    data = JSON.parse(data);
+                    if(data["status"] == 1) {
+                        alert('注销啦！下次再来~');
+                        window.location.href="{% url 'index' %}";
+                    }
+                    }
+            });
+        }
+    }
+</script>
+</body>
+</html>
