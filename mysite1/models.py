@@ -1,4 +1,5 @@
 from django.db import models
+from PyCharm.settings import MEDIA_URL
 
 # Create your models here.
 
@@ -11,7 +12,7 @@ class User(models.Model):
     admin = models.BooleanField(default=False)
 
 def ariticleImg(instance, filename):
-    return '/'.join([MEDIA_ROOT, instance.id, filename])
+    return instance.title+'/'+filename
 
 class Article(models.Model):
     title = models.CharField(max_length = 100)

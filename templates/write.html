@@ -64,12 +64,12 @@
                     </div>
                 </div>
                 <div class="4u 12u$(xsmall)">
-                    <input type="radio" id="priority-low" name="priority" checked>
-                    <label for="priority-low">公开</label>
+                    <input type="radio" id="public" name="priority" checked>
+                    <label for="public">公开</label>
                 </div>
                 <div class="4u 12u$(xsmall)">
-                    <input type="radio" id="priority-normal" name="priority">
-                    <label for="priority-normal">匿名</label>
+                    <input type="radio" id="anonymous" name="priority">
+                    <label for="anonymous">匿名</label>
                 </div>
                 <div class="6u 12u$(small)">
                     <input type="checkbox" id="checkbox" name="checkbox" onclick="Upload(this)">
@@ -79,7 +79,7 @@
                     <input type="file" id="upload" name="upload" style="visibility: hidden">
                 </div>
                 <div class="12u$">
-                    <textarea name="article" id="article" placeholder="开始写吧~" rows="6" style="resize: none"></textarea>
+                    <textarea name="article" id="article" placeholder="开始写吧~" rows="10" style="resize: none"></textarea>
                 </div>
                 <div class="12u$">
                     <ul class="actions">
@@ -114,36 +114,75 @@
     }
 
     ToUpload = function(){
-        var title = document.getElementById('title');
-        var category = document.getElementById('category');
-        var article = document.getElementById('article');
-        var image = document.getElementById('upload');
+        var title = document.getElementById('title').value;
+        var category = document.getElementById('category').value;
+        var article = document.getElementById('article').value;
         var check = document.getElementById('checkbox').checked;
+        var image = document.getElementById('upload').value;
+        var user = "anonymous";
         //输入检测
-        if(title.value == '')
+        if(title == '')
         {
             alert('标题没写呢！');
             return false;
         }
-        if(category.value == 0)
+        if(category == 0)
         {
             alert('请选择类别！');
             return false;
         }
-        if(article.value == '')
+        if(article == '')
         {
             alert('文章好歹写一点吧！');
             return false;
         }
         if(check == true)
         {
-            if(image.value == '')
+            if(image == '')
             {
                 alert('你还没上传图片！');
                 return false;
             }
         }
+        else
+        {
+            image = '';
+        }
+
+        if(document.getElementById('public').checked)
+        {
+            user = "{{ user }}";
+        }
+        var img = document.getElementById('upload').files[0];
+        var formData = new FormData();
         //ajax数据处理
+       /* var post = {
+            "title": title,
+            //"category": category,
+            "user": user,
+            "image": image,
+            "article": article,
+        };
+        */
+       formData.append("title",title);
+       formData.append("user",user);
+       formData.append("img",img);
+       formData.append("article",article);
+        $.ajax({
+            url: "{% url 'write' %}",
+            type: "POST",
+            data: formData,
+            processData:false,
+            contentType:false,
+            success: function (data) {      //服务器数据传输时运行，得到数据data
+                data = JSON.parse(data);
+                if(data["status"] == 1) {
+                    alert('文章发表成功！');
+                    window.location.href="{% url 'ariticles' %}";
+                }
+                }
+        });
+
     }
 
 

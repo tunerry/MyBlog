@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 import json
+from django.core.files.uploadedfile import TemporaryUploadedFile
 from django.views.decorators.csrf import csrf_exempt
 from mysite1 import models
 # Create your views here.
@@ -59,13 +60,14 @@ def login(request):
             find = models.User.objects.filter(name=user)
             if( len(find) and pwd == find[0].pwd):
                 status = 1
+                request.session['isLogin'] = 1
+                request.session['user'] = user
             elif(not len(find)):   #没找到user
                 result = r"用户不存在！"
             else:
                 result = r"密码错误了！"
 
-            request.session['isLogin'] = 1
-            request.session['user'] = user
+
             return HttpResponse(json.dumps({
                 'status': status,
                 'result': result,
@@ -80,8 +82,8 @@ def login(request):
                 models.User.objects.create(name=user,pwd=pwd,email=email)
                 status = 1
                 result = user
-            request.session['isLogin'] = 1
-            request.session['user'] = user
+                request.session['isLogin'] = 1
+                request.session['user'] = user
             return HttpResponse(json.dumps({
                 'status': status,
                 'result': result,
@@ -93,7 +95,19 @@ def articles(request):
     isLogin = request.session.get('isLogin')
     return render(request, "Articles.html", {"user": user,"isLogin":isLogin})
 
+@csrf_exempt
 def write(request):
     user = request.session.get('user')
     isLogin = request.session.get('isLogin')
+    if(request.method == 'POST'):
+        title = request.POST.get('title')
+        image = request.FILES.get('img')
+        article = request.POST.get('article')
+        userid = request.POST.get('user')
+        find = models.User.objects.filter(name=user)
+        models.Article.objects.create(title=title, cover=image, owner=find[0], test=article)
+        return HttpResponse(json.dumps({
+            'status': 1,
+        }))
+
     return render(request, "write.html", {"user": user, "isLogin": isLogin})
