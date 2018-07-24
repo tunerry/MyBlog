@@ -17,6 +17,8 @@ from django.contrib import admin
 
 import mysite1.views
 from django.conf.urls import url
+from django.contrib.staticfiles.urls import static
+from PyCharm import settings
 
 urlpatterns = [
     #url(r'$', mysite1.views.index),
@@ -29,4 +31,4 @@ urlpatterns = [
     url(r'^toLogin', mysite1.views.toLogin, name='toLogin'),
     url(r'^articles',mysite1.views.articles,name='ariticles'),
     url(r'^write', mysite1.views.write, name='write'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

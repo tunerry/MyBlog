@@ -12,7 +12,7 @@ class User(models.Model):
     admin = models.BooleanField(default=False)
 
 def ariticleImg(instance, filename):
-    return instance.title+'/'+filename
+    return instance.title+'/'+'Covers'+'/'+filename
 
 class Article(models.Model):
     title = models.CharField(max_length = 100)
@@ -20,4 +20,6 @@ class Article(models.Model):
     owner = models.ForeignKey('User',related_name='user_article',on_delete=models.CASCADE,)
     cover = models.ImageField(upload_to = ariticleImg,default=None)
     test = models.TextField(max_length=1500)
+    def un(self):
+        return self.owner.name
 

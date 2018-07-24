@@ -93,7 +93,8 @@ def login(request):
 def articles(request):
     user = request.session.get('user')
     isLogin = request.session.get('isLogin')
-    return render(request, "Articles.html", {"user": user,"isLogin":isLogin})
+    articles = reversed(models.Article.objects.all())
+    return render(request, "Articles.html", {"user": user,"isLogin":isLogin,"articles":articles})
 
 @csrf_exempt
 def write(request):
@@ -104,7 +105,7 @@ def write(request):
         image = request.FILES.get('img')
         article = request.POST.get('article')
         userid = request.POST.get('user')
-        find = models.User.objects.filter(name=user)
+        find = models.User.objects.filter(name=userid)
         models.Article.objects.create(title=title, cover=image, owner=find[0], test=article)
         return HttpResponse(json.dumps({
             'status': 1,
