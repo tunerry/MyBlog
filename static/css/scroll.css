@@ -1,0 +1,16 @@
+body, html, main {
+ /* important */
+ height: 100%;
+}
+
+.cd-fixed-bg {
+ min-height: 85%;
+ background-size: cover;
+ background-attachment: fixed;
+ background-repeat: no-repeat;
+ background-position: center center;
+}
+
+.cd-scrolling-bg {
+ min-height: 100%;
+}
