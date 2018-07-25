@@ -2,7 +2,7 @@
 <html>
 <head>
     {% load staticfiles %}
-<title>Ψ(￣∀￣)Ψ</title>
+<title>✧(≖ ◡ ≖✿)</title>
 <meta charset="utf-8" />
 <meta name="viewport " content="width=device-width, initial-scale=1" />
 <link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
@@ -15,7 +15,7 @@
     {% if  not isLogin  %}
 	<a href="{% url 'toLogin' %}" class="logo"><strong id="username">{{ user }}</strong></a>
     {% else  %}
-    <a href="{% url 'center' %}" class="logo"><strong id="username">{{ user }}</strong></a>
+    <a href="#" class="logo"><strong id="username">{{ user }}</strong></a>
     {% endif %}
 	<nav>
 		<a href="#menu">菜单</a>
@@ -26,51 +26,36 @@
 <nav id="menu">
 	<ul class="links">
 		<li><a href="{% url 'index' %}">主页</a></li>
-		<li><a href="#">文章</a></li>
-		<li><a href="{% url 'center' %}" id="center">个人中心</a></li>
+		<li><a href="{% url 'ariticles' %}">文章</a></li>
+		<li><a href="#" id="center">个人中心</a></li>
 		<li><a href="#" id="logout" onclick="Logout()">注销</a></li>
 	</ul>
 </nav>
 
 <!-- Banner -->
-<section id="banner" style="background-image:url({% static "/img/pixiv01.png" %});
+<section id="banner" style="background-image:url({% static "/img/pixiv09.jpg" %});
         background-repeat:no-repeat;
         background-position:50% 50%;
         background-size: cover">    <!--这一条太牛了-->
 	<div class="inner">
-		<h1>开心或是难过<br />
-		请写下来</h1>
-		<ul class="actions">
-            {% if isLogin %}
-			<li><a href="{% url 'write' %}" class="button alt scrolly big">写一篇</a></li>
-            {% else %}
-            <li><a href="{% url 'toLogin' %}" class="button alt scrolly big" onclick="check()">写一篇</a></li>
-            {% endif %}
-		</ul>
+		<h1>小孩子才做选择</br>
+        我全都要</h1>
+        </br>
 	</div>
 </section>
 
-<!-- One -->
-{% for article in articles %}
-<article id="{{ article.id}}" name="articles" class="post style1">
-	<div class="image">
-		<img src="{{ MEDIA_URL }}{{ article.cover }}" data-position="50% center" />
-	</div>
-	<div class="content">
-		<div class="inner">
-			<header>
-				<h2><a href="{% url 'ariticleid' article.articleid %}">{{ article.title }}</a></h2>
-				<p class="info">{{ article.time }} by <a href="">{{ article.un }}</a></p>
-			</header>
-            <p>{{ article.test }}</p>
-            <ul class="actions">
-				<li><a href="{% url 'ariticleid' article.articleid %}" class="button alt">Read More</a></li>
-			</ul>
-		</div>
-	</div>
-</article>
-{% endfor %}
-
+<!-- Main -->
+<section id="main">
+	<div class="inner">
+		<header>
+			<h1>个人中心</h1>
+            <p>ID: {{ User.userid }}</p>
+		</header>
+        <p>姓 名:&emsp;{{ User.name }}</p>
+        <p>性 别:&emsp;{% ifequal User.gender '0' %}保密{% else %}{% ifequal User.gender '1' %}男{% else %}女{% endifequal %}{% endifequal %}</p>
+        <p>电子邮箱:&emsp;{{ User.email }}</p>
+        </div>
+</section>
 
 <!-- Footer -->
 <footer id="footer">
@@ -85,12 +70,6 @@
 <script src="{% static "js/main.js" %}"></script>
 <script type="text/javascript">
     $(function () {
-        var bgs = [];
-        bgs[0] = "{% static 'img/pixiv06-1.jpg' %}";
-        bgs[1] = "{% static 'img/pixiv06-2.jpg' %}";
-        var random = Math.round(Math.random());
-        var imageUrl = "url("+bgs[random]+")";
-        document.getElementById('banner').style.backgroundImage=imageUrl;
 
         if(!{{ isLogin }})
         {
@@ -98,19 +77,8 @@
             document.getElementById('logout').style.display='none';
         }
 
-        var a = document.getElementsByName('articles');
-        for (var i = 0;i < a.length;i++)
-        {
-            if(i % 2 != 0)
-            {
-                a[i].className += ' alt';
-            }
-            if(i !=0 && i % 3 == 0)
-            {
-                a[i].className += ' invert';
-            }
-        }
     });
+
     Logout = function () {
         if({{ isLogin }})
         {
@@ -132,10 +100,7 @@
             });
         }
     }
-    check = function () {
-        alert("你还没登陆呢！");
-        return true;
-    }
+
 
 </script>
 </body>

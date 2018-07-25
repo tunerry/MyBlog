@@ -31,5 +31,6 @@ urlpatterns = [
     url(r'^articles$',mysite1.views.articles,name='ariticles'),
     url(r'^articles/(\d+)$', mysite1.views.articleid, name='ariticleid'),
     url(r'^write$', mysite1.views.write, name='write'),
+    url(r'^center$', mysite1.views.center, name='center'),
     url(r'^$', mysite1.views.index),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

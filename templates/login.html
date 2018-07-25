@@ -89,8 +89,10 @@
     }
 
     Signup = function (){
-        if(document.getElementById("signup_pwd").value != document.getElementById("signup_cpwd").value)
-            return alert("两次输入密码不同！")
+        if(document.getElementById("signup_pwd").value != document.getElementById("signup_cpwd").value) {
+            alert("两次输入密码不同！");
+            return false;
+        }
         var user = document.getElementById("signup_user").value;
         var pwd = document.getElementById("signup_pwd").value;
         var email = document.getElementById("email").value;

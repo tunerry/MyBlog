@@ -23,7 +23,7 @@ def test(request):
 
 @csrf_exempt
 def index(request):
-    #被注销的ajax使用
+    #被注销的ajax借用
     if(request.method == 'POST'):
         method = request.POST.get('method')
         if(method == 'logout'):
@@ -34,9 +34,11 @@ def index(request):
             }))
 
     isLogin = request.session.get('isLogin')
-    if(isLogin == None):
+    print(isLogin)
+    if(not isLogin):
         request.session['isLogin'] = 0
         request.session['user'] = '还没登录呢'
+        isLogin = 0
     user = request.session.get('user')
     return render(request, "index.html", {"user": user,"isLogin":isLogin})
 
@@ -126,3 +128,9 @@ def articleid(request, id):
         t = map(lambda x:'<p>'+x+'</p>', texts)
         article.test = ''.join(t)
     return render(request, "articleid.html", {"user":user, "isLogin":isLogin, "article":article,})
+
+def center(request):
+    user = request.session.get('user')
+    isLogin = request.session.get('isLogin')
+    find = models.User.objects.filter(name=user)
+    return render(request, "center.html", {"user": user, "isLogin": isLogin, "User":find[0],})

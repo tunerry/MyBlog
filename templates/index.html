@@ -16,7 +16,7 @@
     {% if  not isLogin  %}
 	<a href="{% url 'toLogin' %}" class="logo"><strong id="username">{{ user }}</strong></a>
     {% else  %}
-    <a href="#" class="logo"><strong id="username">{{ user }}</strong></a>
+    <a href="{% url 'center' %}" class="logo"><strong id="username">{{ user }}</strong></a>
     {% endif %}
 	<nav>
 		<a href="#menu">菜单</a>
@@ -28,7 +28,7 @@
 	<ul class="links">
 		<li><a href="#">主页</a></li>
 		<li><a href="{% url 'ariticles' %}">文章</a></li>
-		<li><a href="{% url 'generic' %}" id="center">个人中心</a></li>
+		<li><a href="{% url 'center' %}" id="center">个人中心</a></li>
 		<li><a href="#" id="logout" onclick="Logout()">注销</a></li>
 	</ul>
 </nav>
@@ -65,7 +65,7 @@
 <main>
 <!-- One -->
 
-<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv09.jpg" %})">
+<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv10.jpeg" %})">
 
 </div>
 <article class="post" style="background-image: url({% static "/img/pixiv08.png" %});
@@ -83,7 +83,7 @@
         background-size: cover;">
 </article>
 
-<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv04.jpg" %})"></div>
+<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv02.png" %})"></div>
 
 <!-- Three -->
 <article class="post" style="background-image: url({% static "/img/pixiv08.png" %});
