@@ -55,7 +55,7 @@
 	<div class="content">
 		<div class="inner">
 			<header>
-				<h2><a href="toLogin.html">{{ article.title }}</a></h2>
+				<h2><a href="{% url 'ariticleid' article.articleid %}">{{ article.title }}</a></h2>
 				<p class="info">{{ article.time }} by <a href="#">{{ article.un }}</a></p>
 			</header>
             <p>{{ article.test }}</p>

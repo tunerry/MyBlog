@@ -112,3 +112,17 @@ def write(request):
         }))
 
     return render(request, "write.html", {"user": user, "isLogin": isLogin})
+
+def articleid(request, id):
+    user = request.session.get('user')
+    isLogin = request.session.get('isLogin')
+    aid = models.Article.objects.filter(articleid=id)
+    if (not len(aid)):
+        print("id找不到")
+    else:
+        article = aid[0]
+        #处理字符串得到html
+        texts = article.test.splitlines()
+        t = map(lambda x:'<p>'+x+'</p>', texts)
+        article.test = ''.join(t)
+    return render(request, "articleid.html", {"user":user, "isLogin":isLogin, "article":article,})

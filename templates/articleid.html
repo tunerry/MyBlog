@@ -2,12 +2,11 @@
 <html>
 <head>
     {% load staticfiles %}
-<title>Hi~ o(*￣▽￣*)ブ</title>
+<title>Ψ(￣∀￣)Ψ</title>
 <meta charset="utf-8" />
 <meta name="viewport " content="width=device-width, initial-scale=1" />
 <link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
 <link rel="stylesheet" href="{% static "css/main.css" %}" />
-<link rel="stylesheet" href="{% static "css/scroll.css" %}" />
 </head>
 <body>
 
@@ -26,77 +25,32 @@
 <!-- Nav -->
 <nav id="menu">
 	<ul class="links">
-		<li><a href="#">主页</a></li>
+		<li><a href="{% url 'index' %}">主页</a></li>
 		<li><a href="{% url 'ariticles' %}">文章</a></li>
 		<li><a href="{% url 'generic' %}" id="center">个人中心</a></li>
 		<li><a href="#" id="logout" onclick="Logout()">注销</a></li>
 	</ul>
 </nav>
 
-<!-- Banner -->
-<section id="banner" style="background-image:url({% static "/img/pixiv01.png" %});
-        background-repeat:no-repeat;
-        background-position:50% 50%;
-        background-size: cover">    <!--这一条太牛了-->
+<!-- Main -->
+<section id="main">
 	<div class="inner">
-            </br>
-        <h1>幸福或是悲伤</br>
-		请慢慢品味</h1>
-		<ul class="actions">
-			<li><a href="#one" class="button alt scrolly big" style="visibility: hidden">Continue</a></li>
-		</ul>
-	</div>
-            </br>
+		<div class="image fit">
+			<img src="{{ MEDIA_URL }}{{ article.cover }}" alt="" />
+		</div>
+		<header>
+			<h1>{{ article.title }}</h1>
+			<p class="info">{{ article.time }} by <a href="#">{{ article.un }}</a></p>
+		</header>
+        {{ article.test | safe }}
+        </div>
 </section>
-<div style="
-    position: relative;
-    width: 2000px;
-    height: 52px;
-    margin-top: -52px;
-    margin-left: -100px;
-    background: transparent url({% static "/img/linearbot.png" %}) repeat-x left top;
-    z-index: 5;">
-</div>
-<article class="post" style="background-image: url({% static "/img/pixiv08.png" %});
-        background-repeat:no-repeat;
-        background-position:50% 5%;
-        background-size: cover;">
-</article>
-<main>
-<!-- One -->
-
-<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv09.jpg" %})">
-
-</div>
-<article class="post" style="background-image: url({% static "/img/pixiv08.png" %});
-        background-repeat:no-repeat;
-        background-position:50% 5%;
-        background-size: cover;">
-</article>
-
-<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv03.jpg" %})"></div>
-
-<!-- Two -->
-<article class="post" style="background-image: url({% static "/img/pixiv08.png" %});
-        background-repeat:no-repeat;
-        background-position:50% 5%;
-        background-size: cover;">
-</article>
-
-<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv04.jpg" %})"></div>
-
-<!-- Three -->
-<article class="post" style="background-image: url({% static "/img/pixiv08.png" %});
-        background-repeat:no-repeat;
-        background-position:50% 5%;
-        background-size: cover;">
-</article>
 
 <!-- Footer -->
 <footer id="footer">
     <div class="copyright">Copyright &copy; 2018.Company name All rights reserved.lvvvvvvvv.cn - <a href="#" target="_blank" title="联系站长">联系站长</a></div>
 </footer>
-</main>
+
 <!-- Scripts -->
 <script src="{% static "js/jquery.min.js" %}"></script>
 <script src="{% static "js/jquery.scrolly.min.js" %}"></script>
@@ -104,13 +58,16 @@
 <script src="{% static "js/util.js" %}"></script>
 <script src="{% static "js/main.js" %}"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(function () {
+
         if(!{{ isLogin }})
         {
             document.getElementById('center').style.display='none';
             document.getElementById('logout').style.display='none';
         }
+
     });
+
     Logout = function () {
         if({{ isLogin }})
         {
@@ -132,6 +89,8 @@
             });
         }
     }
+
+
 </script>
 </body>
 </html>
