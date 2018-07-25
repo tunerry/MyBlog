@@ -7,6 +7,7 @@
 <meta name="viewport " content="width=device-width, initial-scale=1" />
 <link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
 <link rel="stylesheet" href="{% static "css/main.css" %}" />
+<link rel="stylesheet" href="{% static "css/scroll.css" %}" />
 </head>
 <body>
 
@@ -38,15 +39,36 @@
         background-position:50% 50%;
         background-size: cover">    <!--这一条太牛了-->
 	<div class="inner">
+            </br>
         <h1>幸福或是悲伤</br>
 		请慢慢品味</h1>
 		<ul class="actions">
 			<li><a href="#one" class="button alt scrolly big" style="visibility: hidden">Continue</a></li>
 		</ul>
 	</div>
+            </br>
 </section>
-
+<div style="
+    position: relative;
+    width: 150%;
+    height: 52px;
+    margin-top: -52px;
+    margin-left: -100px;
+    background: transparent url({% static "/img/linearbot.png" %}) repeat-x left top;
+    z-index: 5;">
+</div>
+<article class="post" style="background-image: url({% static "/img/pixiv08.png" %});
+        background-repeat:no-repeat;
+        background-position:50% 5%;
+        background-size: cover;">
+</article>
+<main>
 <!-- One -->
+
+<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv06-1.jpg" %})">
+
+</div>
+
 <article id="one" class="post style1">
 	<div class="image">
 		<img src="{% static "img/pic14.jpg" %}" alt="" data-position="75% center" />
@@ -59,7 +81,7 @@
 			</header>
 			<p>Nullam posuere erat vel placerat rutrum. Praesent ac consectetur dui, et congue quam. Donec aliquam lacinia condimentum. Integer porta massa sapien, commodo sodales diam suscipit vitae. Aliquam quis felis sed urna semper semper. Phasellus eu scelerisque mi. Vivamus aliquam nisl libero, sit amet scelerisque ligula laoreet vel.</p>
 			<ul class="actions">
-				<li><a href="toLogin.html" class="button alt">Read More</a></li>
+				<li><a href="toLogin.html" class="button">Read More</a></li>
 			</ul>
 		</div>
 		<div class="postnav">
@@ -68,6 +90,8 @@
 		</div>
 	</div>
 </article>
+
+<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv03.jpg" %})"></div>
 
 <!-- Two -->
 <article id="two" class="post invert style1 alt">
@@ -92,6 +116,8 @@
 	</div>
 </article>
 
+<div class="cd-fixed-bg" style="background-image: url({% static "/img/pixiv04.jpg" %})"></div>
+
 <!-- Three -->
 <article id="three" class="post style2">
 	<div class="image">
@@ -114,14 +140,12 @@
 		</div>
 	</div>
 </article>
-<div class="tlinks">Collect from <a href="http://www.cssmoban.com/" >手机网站模板</a></div>
-
 
 <!-- Footer -->
 <footer id="footer">
     <div class="copyright">Copyright &copy; 2018.Company name All rights reserved.lvvvvvvvv.cn - <a href="#" target="_blank" title="联系站长">联系站长</a></div>
 </footer>
-
+</main>
 <!-- Scripts -->
 <script src="{% static "js/jquery.min.js" %}"></script>
 <script src="{% static "js/jquery.scrolly.min.js" %}"></script>

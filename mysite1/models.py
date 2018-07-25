@@ -12,9 +12,10 @@ class User(models.Model):
     admin = models.BooleanField(default=False)
 
 def ariticleImg(instance, filename):
-    return instance.title+'/'+'Covers'+'/'+filename
+    return 'Covers'+'/'+filename
 
 class Article(models.Model):
+    articleid = models.AutoField(primary_key=True)
     title = models.CharField(max_length = 100)
     time = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey('User',related_name='user_article',on_delete=models.CASCADE,)
