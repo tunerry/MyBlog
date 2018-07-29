@@ -4,6 +4,7 @@ import json
 from django.core.files.uploadedfile import TemporaryUploadedFile
 from django.views.decorators.csrf import csrf_exempt
 from mysite1 import models
+import random
 # Create your views here.
 
 #user_list = [{"user":"flansk","pwd":"22002"},]
@@ -34,7 +35,6 @@ def index(request):
             }))
 
     isLogin = request.session.get('isLogin')
-    print(isLogin)
     if(not isLogin):
         request.session['isLogin'] = 0
         request.session['user'] = '还没登录呢'
@@ -96,7 +96,10 @@ def articles(request):
     user = request.session.get('user')
     isLogin = request.session.get('isLogin')
     articles = reversed(models.Article.objects.all())
-    return render(request, "Articles.html", {"user": user,"isLogin":isLogin,"articles":articles})
+    defaults = []
+    for i in range(1,11):
+        defaults.append('Covers/Default_pic/pic' + str(i) + '.jpg')
+    return render(request, "Articles.html", {"user": user,"isLogin":isLogin,"articles":articles,"defaults":defaults})
 
 @csrf_exempt
 def write(request):

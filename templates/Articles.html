@@ -54,7 +54,7 @@
 {% for article in articles %}
 <article id="{{ article.id}}" name="articles" class="post style1">
 	<div class="image">
-		<img src="{{ MEDIA_URL }}{{ article.cover }}" data-position="50% center" />
+		<img src="{{ MEDIA_URL }}{% ifequal article.cover '' %}{{ defaults|random }}{% else %}{{ article.cover }}{% endifequal %}" data-position="50% center" />
 	</div>
 	<div class="content">
 		<div class="inner">
@@ -62,7 +62,7 @@
 				<h2><a href="{% url 'ariticleid' article.articleid %}">{{ article.title }}</a></h2>
 				<p class="info">{{ article.time }} by <a href="">{{ article.un }}</a></p>
 			</header>
-            <p>{{ article.test }}</p>
+            <p>{{ article.test|truncatechars:100  }}</p>
             <ul class="actions">
 				<li><a href="{% url 'ariticleid' article.articleid %}" class="button alt">Read More</a></li>
 			</ul>
