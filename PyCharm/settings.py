@@ -14,14 +14,11 @@ import os
 import posixpath
 import socket
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-ADMINS = (
-    ('tunerry', '781262125@qq.com'),
-)
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'a!5sj_y78zj8vg3@c3q=9wzq(it6xl6i708v7d#c$y49&3bsod'
 
@@ -33,7 +30,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -129,12 +125,38 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
-
-#STATICFILES_DIRS = (
-#    os.path.join(BASE_DIR, 'static')
-#)
-
+"""
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static')
+)
+"""
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+"""
+#qiniu config
+QINIU_ACCESS_KEY = 'gTPSa2A9vp-GdgCxztOx0nXMKNzupwkHzJJsIHV_'
+QINIU_SECRET_KEY = '7SWfIaoo-Gh7UBom67R0UYlSQmUfdPmBONvd2oAX'
+QINIU_BUCKET_NAME = 'tunerry'
+QINIU_BUCKET_DOMAIN = 'media.lvvvvvvvv.cn'
+QINIU_SECURE_URL = False
+
+#media
+PREFIX_URL = 'http://'
+
+MEDIA_URL = PREFIX_URL + QINIU_BUCKET_DOMAIN + '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_FILE_STORAGE = 'qiniustorage.backends.QiniuStorage'
+
+#static
+STATIC_URL = QINIU_BUCKET_DOMAIN + '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_STORAGE = 'qiniustorage.backends.QiniuStorage'
+
+"""

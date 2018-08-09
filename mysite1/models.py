@@ -20,7 +20,25 @@ class Article(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey('User',related_name='user_article',on_delete=models.CASCADE,)
     cover = models.ImageField(upload_to = ariticleImg,default=None)
-    test = models.TextField(max_length=1500)
+    test = models.TextField(max_length=2000)
     def un(self):
         return self.owner.name
 
+def animeImg(instance, filename):
+    return 'Covers'+'/'+'Anime'+'/'+filename
+
+class Anime(models.Model):
+    animeid = models.AutoField(primary_key=True)
+    quarter = models.CharField(max_length = 20)
+    update = models.CharField(max_length=20, default='无')
+    name = models.CharField(max_length=50)
+    cover = models.ImageField(upload_to = animeImg,default=None)
+    introduction = models.TextField(max_length=1000)
+
+
+class Episode(models.Model):
+    episodeid = models.AutoField(primary_key=True)
+    anime = models.ForeignKey('Anime',related_name='episode_anime',on_delete=models.CASCADE,)
+    num = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
+    url = models.CharField(max_length=2000)

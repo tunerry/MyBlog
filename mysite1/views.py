@@ -108,6 +108,7 @@ def write(request):
     if(request.method == 'POST'):
         title = request.POST.get('title')
         image = request.FILES.get('img')
+        print(image)
         article = request.POST.get('article')
         userid = request.POST.get('user')
         find = models.User.objects.filter(name=userid)
