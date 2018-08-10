@@ -12,7 +12,11 @@
 
 <!-- Header -->
 <header id="header">
+    {% if  not isLogin  %}
 	<a href="{% url 'toLogin' %}" class="logo"><strong id="username">{{ user }}</strong></a>
+    {% else  %}
+    <a href="{% url 'center' %}" class="logo"><strong id="username">{{ user }}</strong></a>
+    {% endif %}
 	<nav>
 		<a href="#menu">菜单</a>
 	</nav>

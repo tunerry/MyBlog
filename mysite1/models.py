@@ -30,7 +30,7 @@ def animeImg(instance, filename):
 class Anime(models.Model):
     animeid = models.AutoField(primary_key=True)
     quarter = models.CharField(max_length = 20)
-    update = models.CharField(max_length=20, default='无')
+    time = models.CharField(max_length=20, default='无')
     name = models.CharField(max_length=50)
     cover = models.ImageField(upload_to = animeImg,default=None)
     introduction = models.TextField(max_length=1000)
