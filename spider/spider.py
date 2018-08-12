@@ -174,7 +174,6 @@ def dynamic(url):
 def index(headers):
     r = requests.get('http://www.dilidili.wang/anime/201807/',headers=headers)
     content = decode(r)
-    # soup = BeautifulSoup(content, 'lxml')
     tree = etree.HTML(content)
     urls = tree.xpath('//div[@class="anime_list"]/dl/dd/h3/a/attribute::href')
 
@@ -192,7 +191,6 @@ def info(url, animes, episodes, headers):
     r = requests.get(url, headers=headers)
     content1 = decode(r)
 
-    # soup = BeautifulSoup(content, 'lxml')
     tree = etree.HTML(content1)
     name = tree.xpath('//div[@class="detail con24 clear"]/dl/dd/h1/text()')[0]
     quarter = tree.xpath('//div[@class="detail con24 clear"]/dl/dd/div[@class="d_label"][2]/a/text()')[0]
@@ -200,9 +198,7 @@ def info(url, animes, episodes, headers):
     time = tree.xpath('//div[@class="detail con24 clear"]/dl/dd/div[@class="d_label2"][last()]/text()')[2]    #爬取到的列表中的第三个
     cover = tree.xpath('//div[@class="detail con24 clear"]/dl/dt/img/@src')[0]      #封面的url
     a = anime(quarter=quarter, time=time, name=name, cover=cover, introduction=introduction)
-    #animes.append(a)
     animes.put(a)
-    print("动画一个！")
     e_as = tree.xpath('//div[@class="time_pic list"]/div[1]/div/div/div/ul/li/a')      #第二层div有多个类似，需要从第一层找下来
 
     for e_a in e_as:
@@ -220,30 +216,23 @@ def info(url, animes, episodes, headers):
             try:
                 e_src = dynamic(e_url)
             except:
-                print("sth wrong with def dynamic!")
+                print("Something wrong with dynamic!!")
                 print("{} 第{}集没链接！".format(a.name, num))
         e = episode(num, e_name, e_src, a)
-        #episodes.append(e)
         episodes.put(e)
-        print("新番一集！")
 
 flag = 1
-
 def UpdateDB(a,e):
     while True:
         if not a.empty():
             an = a.get()
-            find = models.Anime.objects.filter(name=an.name)
+            find = models.Anime.objects.get(name=an.name)
             if (len(find)):
-                ani = anime(quarter=find[0].quarter, time=find[0].time, name=find[0].name, introduction=find[0].introduction, cover = '')
-                if an.__dict__ == ani.__dict__:
-                    pass
-                else:
-                    find[0].quarter = an.quarter
-                    find[0].time = an.time
-                    find[0].name = an.name
-                    find[0].introduction = an.introduction
-                    find[0].save()
+                if an.quarter != find.quarter or an.time != find[0].time or an.introduction != find[0].introduction:
+                    find.quarter = an.quarter
+                    find.time = an.time
+                    find.introduction = an.introduction
+                    find.save()
                     print("动画：{}  ——更新完毕！".format(an.name))
             else:
                 #获取图片
@@ -258,19 +247,14 @@ def UpdateDB(a,e):
             ep = e.get()
             ep_a = ep.anime
             find = models.Episode.objects.filter(name=ep.name)
-            find_a = models.Anime.objects.filter(name=ep_a.name)
             if (len(find)):
-                epi = episode(num=find[0].num, url=find[0].url, name=find[0].name)
-                if ep.__dict__ == epi.__dict__:
-                    pass
-                else:
+                if ep.num != find[0].num or ep.url != find[0].url:
                     find[0].num = ep.num
                     find[0].url = ep.url
-                    find[0].name = ep.name
-                    find[0].anime = find_a[0]
                     find[0].save()
-                    print("剧集：{}  ——更新完毕！".format(an.name))
+                    print("剧集：{}  ——更新完毕！".format(ep.name))
             else:
+                find_a = models.Anime.objects.filter(name=ep_a.name)
                 models.Episode.objects.create(num=ep.num, url=ep.url, name=ep.name,
                                                   anime=find_a[0])
                 print("剧集：{}  ——新增完毕！".format(ep.name))
@@ -292,14 +276,11 @@ if __name__ == '__main__':
         "Accept-Language": "zh-CN,zh;q=0.9",
         "Accept-Encoding": "gzip, deflate",
     }
-
     animes = queue.Queue()
     episodes = queue.Queue()
-
     urls = index(headers)
     t = threading.Thread(target=UpdateDB, args=[animes, episodes])
     t.start()
-
-    for i in range(0, 3):
-        info(urls[i], animes, episodes, headers)
+    for u in urls:
+        info(u, animes, episodes, headers)
     flag = 0

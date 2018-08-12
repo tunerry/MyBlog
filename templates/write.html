@@ -67,15 +67,15 @@
                         </select>
                     </div>
                 </div>
-                <div class="4u 12u$(xsmall)">
+                <div class="4u 12u$(xsmall)" id="public_div">
                     <input type="radio" id="public" name="priority" checked>
                     <label for="public">公开</label>
                 </div>
-                <div class="4u 12u$(xsmall)">
+                <div class="4u 12u$(xsmall)" id="anonymous_div">
                     <input type="radio" id="anonymous" name="priority">
                     <label for="anonymous">匿名</label>
                 </div>
-                <div class="6u 12u$(small)">
+                <div class="6u 12u$(small)" id="checkbox_div">
                     <input type="checkbox" id="checkbox" name="checkbox" onclick="Upload(this)">
                     <label for="checkbox">自定义封面图片</label>
                 </div>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="12u$">
                     <ul class="actions">
-                        <li><a class="button special" onclick="ToUpload()">发 表</a></li>
+                        <li><a class="button special" onclick="ToUpload()">{% if edit %}修 改{% else %}发 表{% endif %}</a></li>
                     </ul>
                 </div>
             </div>
@@ -106,6 +106,8 @@
 <script src="{% static "js/util.js" %}"></script>
 <script src="{% static "js/main.js" %}"></script>
 <script type="text/javascript">
+
+
     Upload = function (checkbox) {
         if (checkbox.checked == true)
         {
@@ -130,7 +132,7 @@
             alert('标题没写呢！');
             return false;
         }
-        if(category == 0)
+        if(category == 0 && !{{ edit }})
         {
             alert('请选择类别！');
             return false;
@@ -169,9 +171,17 @@
         };
         */
        formData.append("title",title);
-       formData.append("user",user);
-       formData.append("img",img);
        formData.append("article",article);
+       if({{ edit }})
+       {
+           formData.append("method","edit");
+           formData.append("id",{{ article.articleid }});
+       }
+       else
+       {
+           formData.append("user",user);
+           formData.append("img",img);
+       }
         $.ajax({
             url: "{% url 'write' %}",
             type: "POST",
@@ -184,11 +194,13 @@
                     alert('文章发表成功！');
                     window.location.href="{% url 'ariticles' %}";
                 }
+                if(data["status"] == 2) {
+                    alert('文章修改成功！');
+                    window.location.href="{% url 'ariticles' %}";
+                }
                 }
         });
-
     }
-
 
  $(document).ready(function () {
         if(!{{ isLogin }})
@@ -196,7 +208,20 @@
             document.getElementById('center').style.display='none';
             document.getElementById('logout').style.display='none';
         }
+        if({{ edit }})
+        {
+            document.getElementById('title').value = "{{ article.title }}";
+            document.getElementById('checkbox_div').style.display='none';
+            document.getElementById('public_div').style.display='none';
+            document.getElementById('anonymous_div').style.display='none';
+            var ttt = '';
+            {% for t in texts %}
+                ttt += "{{ t }}" +'\n';
+            {% endfor %}
+            document.getElementById('article').value = ttt;
+        }
     });
+
     Logout = function () {
         if({{ isLogin }})
         {

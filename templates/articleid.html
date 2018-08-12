@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    {% load staticfiles %}
+{% load staticfiles %}
 <title>ヽ(ﾟ∀ﾟ*)ﾉ━━━ｩ♪</title>
 <meta charset="utf-8" />
 <meta name="viewport " content="width=device-width, initial-scale=1" />
@@ -43,6 +43,13 @@
 			<p class="info">{{ article.time }} by <a href="">{{ article.un }}</a></p>
 		</header>
         {{ article.test | safe }}
+        <div class="12u$">
+            <ul class="actions">
+                <br/><br/>
+                <li><a class="button special" style="visibility: hidden" id="edit" href="{% url 'write' article.articleid %}">修 改</a></li>&emsp;&emsp;&emsp;
+                <li><a class="button special" style="visibility: hidden" id="dele" onclick="dele()">删 除</a></li>
+            </ul>
+        </div>
         </div>
 </section>
 
@@ -58,14 +65,21 @@
 <script src="{% static "js/util.js" %}"></script>
 <script src="{% static "js/main.js" %}"></script>
 <script type="text/javascript">
-    $(function () {
-
+    $(document).ready(function () {
         if(!{{ isLogin }})
         {
             document.getElementById('center').style.display='none';
             document.getElementById('logout').style.display='none';
         }
 
+        if({{ isLogin }})
+        {
+            if("{{ user }}"=="{{ article.un }}")
+            {
+                document.getElementById('edit').style.visibility='visible';
+                document.getElementById('dele').style.visibility='visible';
+            }
+        }
     });
 
     Logout = function () {
@@ -90,7 +104,31 @@
         }
     }
 
-
+    dele = function () {
+        if(window.confirm('真的要删除吗？'))
+        {
+            var post_data = {
+                "method": "dele",
+                "id": {{ article.articleid }},
+            };
+            $.ajax({
+            url: "{% url 'write' %}",
+            type: "POST",
+            data: post_data,
+            success: function (data) {      //服务器数据传输时运行，得到数据data
+                data = JSON.parse(data);
+                if(data["status"] == 1) {
+                    alert('删除成功！');
+                    window.location.href="{% url 'ariticles' %}";
+                }
+                }
+        });
+        }
+        else
+        {
+            return false;
+        }
+    }
 </script>
 </body>
 </html>

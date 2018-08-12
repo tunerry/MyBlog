@@ -31,9 +31,10 @@ urlpatterns = [
     url(r'^articles$',mysite1.views.articles,name='ariticles'),
     url(r'^articles/(\d+)$', mysite1.views.articleid, name='ariticleid'),
     url(r'^write$', mysite1.views.write, name='write'),
+    url(r'^write/(\d+)$', mysite1.views.write, name='write'),
     url(r'^center$', mysite1.views.center, name='center'),
     url(r'^$', mysite1.views.index),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)# + static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

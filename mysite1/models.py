@@ -31,7 +31,7 @@ class Anime(models.Model):
     animeid = models.AutoField(primary_key=True)
     quarter = models.CharField(max_length = 20)
     time = models.CharField(max_length=20, default='无')
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=150)
     cover = models.ImageField(upload_to = animeImg,default=None)
     introduction = models.TextField(max_length=1000)
 
@@ -39,6 +39,6 @@ class Anime(models.Model):
 class Episode(models.Model):
     episodeid = models.AutoField(primary_key=True)
     anime = models.ForeignKey('Anime',related_name='episode_anime',on_delete=models.CASCADE,)
-    num = models.CharField(max_length=20)
-    name = models.CharField(max_length=50)
+    num = models.CharField(max_length=50)
+    name = models.CharField(max_length=150)
     url = models.CharField(max_length=2000)

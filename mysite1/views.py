@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
-import json
 from django.core.files.uploadedfile import TemporaryUploadedFile
 from django.views.decorators.csrf import csrf_exempt
 from mysite1 import models
 import random
+import json
+import os
 # Create your views here.
 
 #user_list = [{"user":"flansk","pwd":"22002"},]
@@ -102,22 +103,40 @@ def articles(request):
     return render(request, "Articles.html", {"user": user,"isLogin":isLogin,"articles":articles,"defaults":defaults})
 
 @csrf_exempt
-def write(request):
+def write(request, id=-1):
     user = request.session.get('user')
     isLogin = request.session.get('isLogin')
+    if(id != -1):
+        e_article = models.Article.objects.get(articleid=id)
+        texts = e_article.test.splitlines()
+        return render(request, "write.html", {"user": user, "isLogin": isLogin, "article": e_article, "texts":texts, "edit": 1,})
     if(request.method == 'POST'):
         title = request.POST.get('title')
         image = request.FILES.get('img')
-        print(image)
         article = request.POST.get('article')
         userid = request.POST.get('user')
+        if (request.POST.get('method') == 'edit'):
+            id = request.POST.get('id')
+            e_a = models.Article.objects.get(articleid=id)
+            e_a.title = title
+            e_a.test = article
+            e_a.save()
+            return HttpResponse(json.dumps({
+                'status': 2,
+            }))
+        if(request.POST.get('method') == 'dele'):
+            id = request.POST.get('id')
+            e_a = models.Article.objects.filter(articleid=id).delete()
+            return HttpResponse(json.dumps({
+                'status': 1,
+            }))
         find = models.User.objects.filter(name=userid)
         models.Article.objects.create(title=title, cover=image, owner=find[0], test=article)
         return HttpResponse(json.dumps({
             'status': 1,
         }))
 
-    return render(request, "write.html", {"user": user, "isLogin": isLogin})
+    return render(request, "write.html", {"user": user, "isLogin": isLogin, "edit": 0})
 
 def articleid(request, id):
     user = request.session.get('user')
