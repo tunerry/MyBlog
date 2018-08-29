@@ -64,6 +64,14 @@
 <script src="{% static "js/login.js" %}"></script>
 <script src="{% static "js/jquery.min.js" %}"></script>
 <script type="text/javascript">
+    $(function () {
+        if({{ isLogin }})
+        {
+            window.location.href = document.referrer;
+            window.history.back(-1);
+        }
+    })
+
     Login = function (){    //登录按钮触发
         var user = document.getElementById("login_user").value;
         var pwd = document.getElementById("login_pwd").value;

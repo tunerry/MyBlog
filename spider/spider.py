@@ -226,32 +226,37 @@ def UpdateDB(a,e):
     while True:
         if not a.empty():
             an = a.get()
-            find = models.Anime.objects.get(name=an.name)
-            if (len(find)):
-                if an.quarter != find.quarter or an.time != find[0].time or an.introduction != find[0].introduction:
+            finds = models.Anime.objects.filter(name=an.name)
+            if (len(finds)):
+                find = models.Anime.objects.get(name=an.name)
+                if an.quarter != find.quarter or an.time != find.time or an.introduction != find.introduction:
                     find.quarter = an.quarter
                     find.time = an.time
                     find.introduction = an.introduction
                     find.save()
                     print("动画：{}  ——更新完毕！".format(an.name))
+
             else:
                 #获取图片
                 i = requests.get(an.cover)
+                form = an.cover.split('.')
                 img_content = ContentFile(i.content)
                 new = models.Anime.objects.create(quarter = an.quarter, time = an.time, name = an.name, introduction = an.introduction)
-                new.cover.save(an.name, img_content)
+                cname = an.name.replace('/', '-')
+                new.cover.save(cname + '.' + form[-1], img_content)
                 print("动画：{}  ——新增完毕！".format(an.name))
 
 
         if not e.empty():
             ep = e.get()
             ep_a = ep.anime
-            find = models.Episode.objects.filter(name=ep.name)
-            if (len(find)):
-                if ep.num != find[0].num or ep.url != find[0].url:
-                    find[0].num = ep.num
-                    find[0].url = ep.url
-                    find[0].save()
+            finds = models.Episode.objects.filter(name=ep.name)
+            if (len(finds)):
+                find = models.Episode.objects.get(name=ep.name)
+                if ep.num != find.num or ep.url != find.url:
+                    find.num = ep.num
+                    find.url = ep.url
+                    find.save()
                     print("剧集：{}  ——更新完毕！".format(ep.name))
             else:
                 find_a = models.Anime.objects.filter(name=ep_a.name)
@@ -276,6 +281,7 @@ if __name__ == '__main__':
         "Accept-Language": "zh-CN,zh;q=0.9",
         "Accept-Encoding": "gzip, deflate",
     }
+    print('正在爬取...')
     animes = queue.Queue()
     episodes = queue.Queue()
     urls = index(headers)

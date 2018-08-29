@@ -33,6 +33,10 @@ urlpatterns = [
     url(r'^write$', mysite1.views.write, name='write'),
     url(r'^write/(\d+)$', mysite1.views.write, name='write'),
     url(r'^center$', mysite1.views.center, name='center'),
+    url(r'^anime$', mysite1.views.anime, name='anime'),
+    #url(r'^anime/p(\d+)$', mysite1.views.anime, name='anime'),
+    url(r'^play/(\d+)$', mysite1.views.anime_play, name='play'),
+    url(r'^play/(\d+)_(\d+)$', mysite1.views.anime_play, name='play'),
     url(r'^$', mysite1.views.index),
 ]
 

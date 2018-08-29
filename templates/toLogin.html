@@ -21,8 +21,9 @@
 <!-- Nav -->
 <nav id="menu">
 	<ul class="links">
-		<li><a href="index.html">主页</a></li>
-		<li><a href="#">文章</a></li>
+        <li><a href="{% url 'index' %}">主页</a></li>
+		<li><a href="{% url 'ariticles' %}">文章</a></li>
+		<li><a href="{% url 'anime' %}">动画</a></li>
 	</ul>
 </nav>
 
@@ -44,7 +45,13 @@ function changeFrameHeight(){
     }
     window.onresize=function(){ changeFrameHeight();
 }
-$(function(){changeFrameHeight();});
+$(function(){changeFrameHeight();
+        if({{ isLogin }})
+        {
+            alert('已经登录过了！');
+            window.location.href = document.referrer;   //浏览器返回
+            window.history.back(-1);
+        }});
 </script>
 </body>
 </html>

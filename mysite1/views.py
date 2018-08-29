@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.core.files.uploadedfile import TemporaryUploadedFile
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from mysite1 import models
 import random
 import json
@@ -47,10 +48,12 @@ def generic(request):
     return render(request, "generic.html", )
 
 def toLogin(request):
-    return render(request, "toLogin.html", )
+    isLogin = request.session.get('isLogin')
+    return render(request, "toLogin.html", {"isLogin": isLogin})
 
 @csrf_exempt        #跳过csrf中间件保护
 def login(request):
+    isLogin = request.session.get('isLogin')
     if(request.method == 'POST'):
         method = request.POST.get('method')
         user = request.POST.get('user')
@@ -91,7 +94,7 @@ def login(request):
                 'status': status,
                 'result': result,
             }))
-    return render(request, "login.html",)
+    return render(request, "login.html", {"isLogin": isLogin})
 
 def articles(request):
     user = request.session.get('user')
@@ -157,3 +160,33 @@ def center(request):
     isLogin = request.session.get('isLogin')
     find = models.User.objects.filter(name=user)
     return render(request, "center.html", {"user": user, "isLogin": isLogin, "User":find[0],})
+
+#用Paginator分页
+def anime(request):
+    user = request.session.get('user')
+    isLogin = request.session.get('isLogin')
+    find = models.Anime.objects.all().order_by('animeid')
+
+    paginator = Paginator(find, 5, 2)
+    page = request.GET.get('page')
+    try:
+        animes = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        animes = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        animes = paginator.page(paginator.num_pages)
+
+    return render(request, "Anime.html", {"user": user, "isLogin": isLogin, "animes": animes, })
+
+def anime_play(request, a_id, e_id=-1):
+    user = request.session.get('user')
+    isLogin = request.session.get('isLogin')
+    anime = models.Anime.objects.get(animeid=a_id)
+    episodes = anime.episode_anime.all()
+    if(e_id == -1):
+        e = episodes[0]
+    else:
+        e = models.Episode.objects.get(episodeid=e_id)
+    return render(request, "anime_play.html", {"user": user, "isLogin": isLogin, "episodes": episodes, "anime": anime, "e": e })
