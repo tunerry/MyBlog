@@ -36,20 +36,22 @@
 </nav>
 
 <!-- Banner -->
-<section id="banner" style="background-image:url({% static "/img/pixiv11.png" %});
+<section id="banner" style="background-image:url({% static "/img/pixiv13.jpg" %});
         background-repeat:no-repeat;
         background-position:50% 50%;
         background-size: cover">    <!--这一条太牛了-->
 	<div class="inner">
-		<h1>你那无聊的幻想<br />
-		就由我来打破</h1>
-		<ul class="actions" style="visibility: hidden">
-            {% if isLogin %}
-			<li><a href="{% url 'write' %}" class="button alt scrolly big">写一篇</a></li>
-            {% else %}
-            <li><a href="{% url 'toLogin' %}" class="button alt scrolly big" onclick="check()">写一篇</a></li>
-            {% endif %}
-		</ul>
+		<h1>哪里会有人喜欢孤单<br />
+		不过是不喜欢失望</h1>
+		<form method="get" action="/search/" class="actions" style="margin: 200px 0px -30px 0px;" onsubmit="return Search()">
+                {% csrf_token %}
+            <div class="2u 12u$(xsmall)" style="float: left;">  <!--用float实现对齐-->
+                    <input type="text" id="search" name="q" placeholder="想看点啥">
+                </div>
+                <div style="display: inline">
+                    <button type="submit" class="button alt small" style="float: left; height: 58.66px;">搜索</button>
+                </div>
+        </form>
 	</div>
 </section>
 
@@ -68,17 +70,18 @@
 			</header>
             <p>{{ anime.introduction|truncatechars:100  }}</p>
             <ul class="actions">
-				<li><a href="" class="button alt">播 放</a></li>
+				<li><a href="{% url 'play' anime.animeid %}" class="button alt">播 放</a></li>
 			</ul>
 		</div>
 	</div>
 </article>
 {% endfor %}
+<!-- 分页 -->
 <section id="main">
     <div class="inner">
     <div style="text-align: center">
         {% if animes.has_previous %}
-            <a href="?page={{ animes.previous_page_number }}" class="button alt">
+            <a href="?page=1" class="button alt">
                 <span>&laquo;</span>
             </a>
         {% endif %}
@@ -96,7 +99,7 @@
             {% endif %}
         {% endfor %}
         {% if animes.has_next %}
-            <a href="?page={{ animes.next_page_number }}" class="button alt">
+            <a href="?page={{ animes.paginator.num_pages }}" class="button alt" style="margin: 0px 0px 0px 5px;">
                 <span>&raquo;</span>
             </a>
         {% endif %}
@@ -156,8 +159,14 @@
             });
         }
     }
-    check = function () {
-        alert("你还没登陆呢！");
+
+    Search = function () {
+        var s = document.getElementById('search').value;
+        if(!s)
+        {
+            alert('没有搜索内容！');
+            return false;
+        }
         return true;
     }
 

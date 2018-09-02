@@ -45,7 +45,7 @@ def index(request):
     return render(request, "index.html", {"user": user,"isLogin":isLogin})
 
 def generic(request):
-    return render(request, "generic.html", )
+    return render(request, "elements.html", )
 
 def toLogin(request):
     isLogin = request.session.get('isLogin')
@@ -99,7 +99,18 @@ def login(request):
 def articles(request):
     user = request.session.get('user')
     isLogin = request.session.get('isLogin')
-    articles = reversed(models.Article.objects.all())
+    find = models.Article.objects.all().order_by('-time')   #加 - 表示降序
+
+    paginator = Paginator(find, 4, 1)
+    page = request.GET.get('page')
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        articles = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        articles = paginator.page(paginator.num_pages)
     defaults = []
     for i in range(1,11):
         defaults.append('Covers/Default_pic/pic' + str(i) + '.jpg')

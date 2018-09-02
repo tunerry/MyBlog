@@ -19,11 +19,12 @@ import mysite1.views
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import static
 from PyCharm import settings
+from django.conf.urls import include
 
 urlpatterns = [
     #url(r'$', mysite1.views.index),
     #url(r'^admin', admin.site.urls),
-    url(r'^test', mysite1.views.test),
+    url(r'^test$', mysite1.views.test),
     url(r'^index$', mysite1.views.index,name='index'),
     url(r'^generic', mysite1.views.generic,name='generic'),
     url(r'^login$', mysite1.views.login, name='login'),
@@ -34,9 +35,9 @@ urlpatterns = [
     url(r'^write/(\d+)$', mysite1.views.write, name='write'),
     url(r'^center$', mysite1.views.center, name='center'),
     url(r'^anime$', mysite1.views.anime, name='anime'),
-    #url(r'^anime/p(\d+)$', mysite1.views.anime, name='anime'),
     url(r'^play/(\d+)$', mysite1.views.anime_play, name='play'),
     url(r'^play/(\d+)_(\d+)$', mysite1.views.anime_play, name='play'),
+    url(r'^search/', include('haystack.urls'), name='search'),
     url(r'^$', mysite1.views.index),
 ]
 

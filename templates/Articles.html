@@ -2,6 +2,7 @@
 <html>
 <head>
     {% load staticfiles %}
+    {% load pageTag %}
 <title>Ψ(￣∀￣)Ψ</title>
 <meta charset="utf-8" />
 <meta name="viewport " content="width=device-width, initial-scale=1" />
@@ -71,6 +72,36 @@
 	</div>
 </article>
 {% endfor %}
+<!-- 分页 -->
+<section id="main">
+    <div class="inner">
+    <div style="text-align: center">
+        {% if articles.has_previous %}
+            <a href="?page=1" class="button alt">
+                <span>&laquo;</span>
+            </a>
+        {% endif %}
+        {% for pg in articles.paginator.page_range %}
+            {% if articles.number|circle:pg  %}
+            {% if pg == articles.number %}
+                <a href="?page={{ pg }}" class="button alt special" style="margin: 0px -5px 0px 0px;">
+                    <span>{{ pg }}</span>
+                </a>
+            {% else %}
+                <a href="?page={{ pg }}" class="button alt" style="margin: 0px -5px 0px 0px;">
+                    <span>{{ pg }}</span>
+                </a>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% if articles.has_next %}
+            <a href="?page={{ articles.paginator.num_pages }}" class="button alt" style="margin: 0px 0px 0px 5px;">
+                <span>&raquo;</span>
+            </a>
+        {% endif %}
+    </div>
+    </div>
+</section>
 
 
 <!-- Footer -->

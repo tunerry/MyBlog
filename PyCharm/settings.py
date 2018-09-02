@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mysite1.apps.Mysite1Config',
+    'haystack',
 ]
 
 MIDDLEWARE = [
@@ -108,6 +109,18 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+
+# 当数据库改变时，会自动更新索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+# 单页最大显示条目
+HAYSTACK_SEARCH_RESULTS_PER_PAGE  =  5
 
 LANGUAGE_CODE = 'en-us'
 
