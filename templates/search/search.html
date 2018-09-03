@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    {% load staticfiles %}
+    {% load pageTag %}
+    {% load highlight %}
+<title>(ﾉ*･ω･)ﾉ</title>
+<meta charset="utf-8" />
+<meta name="viewport " content="width=device-width, initial-scale=1" />
+<link rel="shortcut icon" href="{% static "/img/favicon.ico" %}">
+<link rel="stylesheet" href="{% static "css/main.css" %}" />
+<link rel="stylesheet" href="{% static "css/scroll.css" %}" />
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+    {% if  not isLogin  %}
+	<a href="{% url 'toLogin' %}" class="logo"><strong id="username">{{ user }}</strong></a>
+    {% else  %}
+    <a href="{% url 'center' %}" class="logo"><strong id="username">{{ user }}</strong></a>
+    {% endif %}
+	<nav>
+		<a href="#menu">菜单</a>
+	</nav>
+</header>
+
+<!-- Nav -->
+<nav id="menu">
+	<ul class="links">
+		<li><a href="{% url 'index' %}">主页</a></li>
+		<li><a href="{% url 'ariticles' %}">文章</a></li>
+		<li><a href="{% url 'anime' %}">动画</a></li>
+		<li><a href="{% url 'center' %}" id="center">个人中心</a></li>
+		<li><a href="#" id="logout" onclick="Logout()">注销</a></li>
+	</ul>
+</nav>
+
+<!-- Banner -->
+<section id="banner" style="background-image:url({% static "/img/pixiv11.png" %});
+        background-repeat:no-repeat;
+        background-position:50% 50%;
+        background-size: cover">
+	<div class="inner">
+        <h1 id="words">你想要的都在这里<br />
+		找到如下</h1>
+        <ul class="actions">
+			<li><a href="#one" class="button alt scrolly big" style="visibility: hidden"></a></li>
+		</ul>
+	</div>
+</section>
+
+<!-- main -->
+
+{% for result in page.object_list %}
+    <article id="{{ result.object.animeid}}" name="articles" class="post style1">
+        <div class="image">
+            <img src="{{ MEDIA_URL }}{{ result.object.cover }}" data-position="100% center" />
+        </div>
+        <div class="content">
+            <div class="inner">
+                <header>
+                    <h2><a href="{% url 'play' result.object.animeid %}">{{ result.object.name }}</a></h2>
+                    <p class="info">季度： {{ result.object.quarter }}<br />
+                    更新时间: {{ result.object.time }}</p>
+                </header>
+                <p>    {% highlight result.object.introduction with query html_tag "b" max_length 80 %}</p>
+                <ul class="actions">
+                    <li><a href="{% url 'play' result.object.animeid %}" class="button alt">播 放</a></li>
+                </ul>
+            </div>
+        </div>
+    </article>
+    {% empty %}
+        <section id="main">
+            <div class="content">
+                <div class="inner">
+                    <header calss="major special">
+                        <h1>啥也没找到</h1>
+                        <p>Sorry~我们没有这部动画 ! 或者换个关键词再试试.</p>
+                    </header>
+            </div>
+            </div>
+        </section>
+{% endfor %}
+
+<section id="main">
+    <div class="inner">
+    <div style="text-align: center">
+        {% if page.has_previous %}
+            <a href="?q={{ query }}&amp;page=1" class="button alt">
+                <span>&laquo;</span>
+            </a>
+        {% endif %}
+        {% for pg in page.paginator.page_range %}
+            {% if page.number|circle:pg  %}
+            {% if pg == page.number %}
+                <a href="?q={{ query }}&amp;page={{ pg }}" class="button alt special" style="margin: 0px -5px 0px 0px;">
+                    <span>{{ pg }}</span>
+                </a>
+            {% else %}
+                <a href="?q={{ query }}&amp;page={{ pg }}" class="button alt" style="margin: 0px -5px 0px 0px;">
+                    <span>{{ pg }}</span>
+                </a>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% if page.has_next %}
+            <a href="?q={{ query }}&amp;page={{ page.paginator.num_pages }}" class="button alt" style="margin: 0px 0px 0px 5px;">
+                <span>&raquo;</span>
+            </a>
+        {% endif %}
+    </div>
+    </div>
+</section>
+<!-- Footer -->
+<footer id="footer">
+    <div class="copyright">Copyright &copy; 2018.Company name All rights lvvvvvvvv.cn - <a href="#" target="_blank" title="联系站长">联系站长</a></div>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/jquery.scrolly.min.js" %}"></script>
+<script src="{% static "js/skel.min.js" %}"></script>
+<script src="{% static "js/util.js" %}"></script>
+<script src="{% static "js/main.js" %}"></script>
+<script type="text/javascript">
+    $(function () {
+
+        if(!{{ isLogin }})
+        {
+            document.getElementById('center').style.display='none';
+            document.getElementById('logout').style.display='none';
+        }
+
+        var a = document.getElementsByName('articles');
+        for (var i = 0;i < a.length;i++)
+        {
+            if(i % 2 != 0)
+            {
+                a[i].className += ' alt';
+                a[i].className += ' invert';
+            }
+        }
+
+    });
+    Logout = function () {
+        if({{ isLogin }})
+        {
+            var post_data ={
+                "method": "logout"
+            };
+
+            $.ajax({
+                url: "{% url 'index' %}",
+                type: "POST",
+                data: post_data,
+                success: function (data) {      //服务器数据传输时运行，得到数据data
+                    data = JSON.parse(data);
+                    if(data["status"] == 1) {
+                        alert('注销啦！下次再来~');
+                        window.location.href="{% url 'index' %}";
+                    }
+                    }
+            });
+        }
+    }
+</script>
+</body>
+</html>

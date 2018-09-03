@@ -7,10 +7,6 @@ from mysite1 import models
 import random
 import json
 import os
-# Create your views here.
-
-#user_list = [{"user":"flansk","pwd":"22002"},]
-
 
 def test(request):
     #return HttpResponse("Hello World!")

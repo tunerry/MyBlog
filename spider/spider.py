@@ -1,7 +1,12 @@
 import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "PyCharm.settings")
+import django
+django.setup()
+from mysite1 import models
 import requests
 import threading
 import queue
+import logging
 from io import BytesIO
 from lxml import etree
 from time import sleep
@@ -35,9 +40,13 @@ def decode(r):
         return content
 
 def dynamic(url):
+
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
+    prefs = {"profile.managed_default_content_settings.images": 2}
+    options.add_experimental_option("prefs", prefs)
     browser = webdriver.Chrome(chrome_options=options)
     browser.get(url)
     # 添加cookie
@@ -169,18 +178,21 @@ def dynamic(url):
     browser.get(url)
     # 开爬
     s = browser.find_element_by_xpath('//div[@class="container clear"]/div[@class="clear"]/div[@class="player_main"]/iframe')
-    return s.get_attribute('src')
+    src = s.get_attribute('src')
+    browser.quit()
+    return src
 
-def index(headers):
-    r = requests.get('http://www.dilidili.wang/anime/201807/',headers=headers)
-    content = decode(r)
-    tree = etree.HTML(content)
-    urls = tree.xpath('//div[@class="anime_list"]/dl/dd/h3/a/attribute::href')
-
-    for i in range(0,len(urls)):
-        """res = requests.get(pic)
-        data = res.content"""
-        urls[i] = 'http://www.dilidili.wang' + urls[i]
+def index(headers, targets):
+    urls = []
+    for target in targets:
+        r = requests.get(target,headers=headers)
+        content = decode(r)
+        tree = etree.HTML(content)
+        uu = tree.xpath('//div[@class="anime_list"]/dl/dd/h3/a/attribute::href')
+        for u in uu:
+            url = 'http://www.dilidili.wang' + u
+            print(url)
+            urls.append(url)
 
     return urls
 
@@ -221,6 +233,27 @@ def info(url, animes, episodes, headers):
         e = episode(num, e_name, e_src, a)
         episodes.put(e)
 
+
+def console_out(m):
+    ''''' Output log to file and console '''
+    # Define a Handler and set a format which output to file
+    logging.basicConfig(
+        level=logging.DEBUG,  # 定义输出到文件的log级别，大于此级别的都被输出
+        format='%(asctime)s  %(filename)s :  %(message)s',  # 定义输出log的格式
+        datefmt='%Y-%m-%d %A %H:%M:%S',  # 时间
+        filename='spider.log',  # log文件名
+        filemode='w')  # 写入模式“w”或“a”
+    # Define a Handler and set a format which output to console
+    console = logging.StreamHandler()  # 定义console handler
+    console.setLevel(logging.INFO)  # 定义该handler级别
+    formatter = logging.Formatter('%(asctime)s  %(filename)s :  %(message)s')  # 定义该handler格式
+    console.setFormatter(formatter)
+    # Create an instance
+    logging.getLogger().addHandler(console)  # 实例化添加handler
+
+    # Print information              # 输出日志级别
+    logging.debug(m)
+
 flag = 1
 def UpdateDB(a,e):
     while True:
@@ -235,6 +268,7 @@ def UpdateDB(a,e):
                     find.introduction = an.introduction
                     find.save()
                     print("动画：{}  ——更新完毕！".format(an.name))
+                    console_out("动画：{}  ——更新完毕！\n".format(an.name))
 
             else:
                 #获取图片
@@ -245,7 +279,7 @@ def UpdateDB(a,e):
                 cname = an.name.replace('/', '-')
                 new.cover.save(cname + '.' + form[-1], img_content)
                 print("动画：{}  ——新增完毕！".format(an.name))
-
+                console_out("动画：{}  ——新增完毕！\n".format(an.name))
 
         if not e.empty():
             ep = e.get()
@@ -258,20 +292,18 @@ def UpdateDB(a,e):
                     find.url = ep.url
                     find.save()
                     print("剧集：{}  ——更新完毕！".format(ep.name))
+                    console_out("剧集：{}  ——更新完毕！\n".format(ep.name))
             else:
                 find_a = models.Anime.objects.filter(name=ep_a.name)
                 models.Episode.objects.create(num=ep.num, url=ep.url, name=ep.name,
                                                   anime=find_a[0])
                 print("剧集：{}  ——新增完毕！".format(ep.name))
+                console_out("剧集：{}  ——新增完毕！\n".format(ep.name))
 
         if flag==0 and a.empty() and e.empty():
             break
 
 if __name__ == '__main__':
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "PyCharm.settings")
-    import django
-    django.setup()
-    from mysite1 import models
     #程序主体
     headers = {
         "Connection": "keep-alive",
@@ -284,9 +316,12 @@ if __name__ == '__main__':
     print('正在爬取...')
     animes = queue.Queue()
     episodes = queue.Queue()
-    urls = index(headers)
+    targets = ['http://www.dilidili.wang/anime/201801/','http://www.dilidili.wang/anime/201804/','http://www.dilidili.wang/anime/201807/']
+    urls = index(headers, targets)
     t = threading.Thread(target=UpdateDB, args=[animes, episodes])
     t.start()
     for u in urls:
         info(u, animes, episodes, headers)
     flag = 0
+
+    console_out('程序运行完毕！\n\n')
