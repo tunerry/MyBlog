@@ -118,7 +118,8 @@ def write(request, id=-1):
     isLogin = request.session.get('isLogin')
     if(id != -1):
         e_article = models.Article.objects.get(articleid=id)
-        texts = e_article.test.splitlines()
+        text = e_article.test.replace("\"","\'")
+        texts = text.splitlines()
         return render(request, "write.html", {"user": user, "isLogin": isLogin, "article": e_article, "texts":texts, "edit": 1,})
     if(request.method == 'POST'):
         title = request.POST.get('title')

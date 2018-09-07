@@ -216,7 +216,7 @@
             document.getElementById('anonymous_div').style.display='none';
             var ttt = '';
             {% for t in texts %}
-                ttt += "{{ t }}" +'\n';
+                ttt += "{{ t |safe }}" +'\n';
             {% endfor %}
             document.getElementById('article').value = ttt;
         }
